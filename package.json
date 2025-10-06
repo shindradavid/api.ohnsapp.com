@@ -1,0 +1,50 @@
+{
+  "name": "api.ohnsapp.com",
+  "version": "1.0.0",
+  "description": "OHNS APP API",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "start": "NODE_ENV=production ts-node-dev --transpile-only src/app.ts",
+    "create:admin": "ts-node-dev --transpile-only src/scripts/createAdmin.ts",
+    "migrations:generate": "typeorm-ts-node-commonjs -d typeorm.config.ts migration:generate src/migrations/migration",
+    "migrations:run": "typeorm-ts-node-commonjs -d typeorm.config.ts migration:run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.16.1",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.896.0",
+    "@types/multer": "^2.0.0",
+    "axios": "^1.12.2",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0",
+    "inquirer": "^12.9.6",
+    "libphonenumber-js": "^1.12.23",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.6",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "sharp": "^0.34.4",
+    "slugify": "^1.6.6",
+    "typeorm": "^0.3.27",
+    "ua-parser-js": "^2.0.5",
+    "uuid": "^13.0.0",
+    "xml2js": "^0.6.2",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.5.2",
+    "@types/xml2js": "^0.4.14",
+    "ts-node-dev": "^2.0.0"
+  }
+}
