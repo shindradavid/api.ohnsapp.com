@@ -48,6 +48,7 @@ async function main() {
   if (!adminRole) {
     adminRole = employeeRoleRepository.create({
       name: 'Admin',
+      slug: 'admin',
       permissions: Object.values(AllPermissions),
     });
 
@@ -78,14 +79,13 @@ async function main() {
       email: input.email,
       phoneNumber: input.phoneNumber,
       hashedPassword,
-      photoUrl: `https://api.dicebear.com/9.x/initials/png?seed=${encodeURIComponent(
-        input.name,
-      )}`,
+      photoUrl: `https://api.dicebear.com/9.x/initials/png?seed=${encodeURIComponent(input.name)}`,
     });
 
     await manager.save(Employee, {
       userAccount: user,
       role: adminRole,
+      type: 'admin',
     });
 
     console.log(`✅ Admin user "${user.name}" created with email ${user.email}`);

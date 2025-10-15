@@ -6,6 +6,8 @@ import { Session } from '../entities/Session';
 import { AuditLog } from '../entities/AuditLog';
 import { Employee } from '../entities/Employee';
 import { EmployeeRole } from '../entities/EmployeeRole';
+import { Customer } from '../entities/Customer';
+import { Airport } from '../entities/Airport';
 
 const databaseClient = new DataSource({
   type: 'postgres',
@@ -15,7 +17,7 @@ const databaseClient = new DataSource({
   password: envHelper.DB_PASSWORD,
   database: envHelper.DB_NAME,
   synchronize: true,
-  entities: [AuditLog, User, Session, Employee, EmployeeRole],
+  entities: [AuditLog, User, Session, Employee, EmployeeRole, Customer, Airport],
   migrations: ['src/migrations/**/*.ts'],
   migrationsTableName: 'migrations',
 });

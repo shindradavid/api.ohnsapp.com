@@ -1,11 +1,13 @@
 /// <reference path="./app.d.ts" />
 
+import http from 'http';
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 
 import { envHelper } from './helpers';
+// import { setupSocket } from './socket';
 import databaseClient from './config/databaseClient';
 import requestLoggingMiddleware from './middleware/requestLoggingMiddleware';
 import errorHandlingMiddleware from './middleware/errorHandlingMiddleware';
@@ -35,7 +37,7 @@ async function createApp() {
   );
   app.use(requestLoggingMiddleware);
 
-  // routers
+  // http routers
   app.use('/audit-logs', auditLogsRouter);
   app.use('/auth', authRouter);
   app.use('/employees', employeesRouter);
@@ -51,10 +53,15 @@ async function createApp() {
     process.exit(1);
   }
 
+  const server = http.createServer(app);
+  // const io = setupSocket(server);
+
+  // socket handlers
+
   const PORT = envHelper.PORT;
   const HOST = envHelper.HOST;
 
-  const server = app.listen(PORT, HOST, () => {
+  server.listen(PORT, HOST, () => {
     console.log(`✅ Server is running at http://${HOST}:${PORT}`);
   });
 

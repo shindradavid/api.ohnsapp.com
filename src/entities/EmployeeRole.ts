@@ -1,28 +1,17 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  BaseEntity,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 import { Employee } from './Employee';
 
 export const PermissionGroups = {
+  employeeRole: ['view employee role', 'create employee role', 'delete employee role', 'edit employee role'],
   employee: ['view employee', 'create employee', 'delete employee', 'edit employee'],
-  employeeRole: [
-    'view employee role',
-    'create employee role',
-    'delete employee role',
-    'edit employee role',
-  ],
-  auditLogs: ['view audit logs'],
+  vehicle: ['view vehicle', 'create vehicle', 'delete vehicle', 'edit vehicle'],
+  airport: ['view airport', 'create airport', 'delete airport', 'edit airport'],
+  customer: ['view customer', 'create customer', 'delete customer', 'edit customer'],
+  auditLog: ['view audit log'],
 } as const;
 
-export type EmployeePermission =
-  (typeof PermissionGroups)[keyof typeof PermissionGroups][number];
+export type EmployeePermission = (typeof PermissionGroups)[keyof typeof PermissionGroups][number];
 
 export const AllPermissions = Object.values(PermissionGroups).flat() as EmployeePermission[];
 

@@ -42,6 +42,8 @@ export class Customer extends BaseEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @OneToMany(() => AirportPickupBooking, (airportPickupBooking) => airportPickupBooking.customer)
-  airportPickupBookings!: AirportPickupBooking[];
+  // preferred currency
+
+  // @OneToMany(() => AirportPickupBooking, (airportPickupBooking) => airportPickupBooking.customer)
+  // airportPickupBookings!: AirportPickupBooking[];
 }

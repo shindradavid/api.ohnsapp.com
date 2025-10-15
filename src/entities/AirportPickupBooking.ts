@@ -15,7 +15,7 @@ import { Airport } from './Airport';
 import { Customer } from './Customer';
 
 export const AIRPORT_BOOKING_STATUSES = [
-  'pending',
+  'pending_payment',
   'accepted',
   'driver_en_route_to_pickup',
   'driver_arrived_at_pickup',
@@ -69,11 +69,11 @@ export class AirportPickupBooking extends BaseEntity {
   @JoinColumn({ name: 'customer_id' })
   customer!: Customer;
 
-  @Column({ name: 'drop_off_latitude', type: 'decimal', precision: 10, scale: 8, nullable: true })
-  dropOffLatitude!: number | null;
+  @Column({ name: 'drop_off_latitude', type: 'decimal', precision: 10, scale: 8 })
+  dropOffLatitude!: number;
 
-  @Column({ name: 'drop_off_longitude', type: 'decimal', precision: 11, scale: 8, nullable: true })
-  dropOffLongitude!: number | null;
+  @Column({ name: 'drop_off_longitude', type: 'decimal', precision: 11, scale: 8 })
+  dropOffLongitude!: number;
 
   @Column({ name: 'drop_off_location_name', type: 'text', nullable: true })
   dropOffLocationName!: string | null;
