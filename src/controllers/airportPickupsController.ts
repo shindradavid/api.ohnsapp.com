@@ -10,9 +10,10 @@ import { HttpStatus } from '../enums';
 import { formatSuccessResponse } from '../utils';
 import { Airport } from '../entities/Airport';
 import { AirportPickupBooking } from '../entities/AirportPickupBooking';
-import { AirportPickupServiceCategory } from '../entities/AirportPickupServiceCategory';
+import { AirportPickupRideOptions } from '../entities/AirportPickupRideOptions';
 import { envHelper } from '../helpers';
 import { AirportPickupBookingPayment } from '../entities/AirportPickupBookingPayment';
+import storageService from '../services/storageService';
 
 const handleCreateAirport = expressAsyncHandler(async (req: Request, res: Response) => {
   const createAirportDataSchema = z.object({
@@ -68,6 +69,39 @@ const handleUpdateAirport = expressAsyncHandler(async (req: Request, res: Respon
 
 const handleDeleteAirport = expressAsyncHandler(async (req: Request, res: Response) => {});
 
+const handleCreateAirportPickupRideOption = expressAsyncHandler(async (req: Request, res: Response) => {
+  const createAirportPickupRideOptionDataSchema = z.object({
+    name: z.string().trim(),
+    pricePerMileUgx: z.coerce.number(),
+    pricePerMileUsd: z.coerce.number(),
+  });
+
+  const { name, pricePerMileUgx, pricePerMileUsd } = createAirportPickupRideOptionDataSchema.parse(req.body);
+
+  const file = req.file;
+
+  if (!file) {
+    throw new HttpException(HttpStatus.BAD_REQUEST, 'No photo uploaded');
+  }
+
+  const photoUrl = await storageService.uploadImageFile(file, 'airport-pickup-ride-options');
+
+  const airportPickupRideOptions = await AirportPickupRideOptions.save({
+    name,
+    pricePerMileUgx,
+    pricePerMileUsd,
+    photoUrl,
+  });
+
+  res.status(HttpStatus.CREATED).json(formatSuccessResponse('Ride option created successfully', airportPickupRideOptions));
+});
+
+const handleGetAirportPickupRideOptions = expressAsyncHandler(async (req: Request, res: Response) => {
+  const airportPickupRideOptions = await AirportPickupRideOptions.find();
+
+  res.status(HttpStatus.OK).json(formatSuccessResponse('Success', airportPickupRideOptions));
+});
+
 const handleCreateAirportPickupBooking = expressAsyncHandler(async (req: Request, res: Response) => {
   const authUser = req.user;
 
@@ -99,7 +133,7 @@ const handleCreateAirportPickupBooking = expressAsyncHandler(async (req: Request
 
   const transactionResults = await databaseClient.manager.transaction(async (transactionalEntityManager) => {
     const airportRepository = transactionalEntityManager.getRepository(Airport);
-    const airportPickupServiceCategoryRepository = transactionalEntityManager.getRepository(AirportPickupServiceCategory);
+    const airportPickupServiceCategoryRepository = transactionalEntityManager.getRepository(AirportPickupRideOptions);
     const airportPickupBookingPaymentRepository = transactionalEntityManager.getRepository(AirportPickupBookingPayment);
 
     const airport = await airportRepository.findOne({ where: { id: airportId } });
@@ -195,4 +229,6 @@ export default {
   handleUpdateAirport,
   handleCreateAirportPickupBooking,
   handleGetAirportPickupBookings,
+  handleCreateAirportPickupRideOption,
+  handleGetAirportPickupRideOptions,
 };

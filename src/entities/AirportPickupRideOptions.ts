@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity({ name: 'airport_pickup_service_categories' })
-export class AirportPickupServiceCategory extends BaseEntity {
+@Entity({ name: 'airport_pickup_ride_options' })
+export class AirportPickupRideOptions extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -30,6 +30,9 @@ export class AirportPickupServiceCategory extends BaseEntity {
     },
   })
   pricePerMileUsd!: number;
+
+  @Column({ name: 'photo_url', type: 'varchar' })
+  photoUrl!: string;
 
   @Column({ name: 'is_active', default: true })
   isActive!: boolean;
