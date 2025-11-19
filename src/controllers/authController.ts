@@ -166,35 +166,6 @@ const handleDeleteSession = expressAsyncHandler(async (req: Request, res: Respon
   res.status(200).send({ success: true, message: 'Session terminated' });
 });
 
-const handleLogout = expressAsyncHandler(async (req: Request, res: Response) => {
-  const user = req.user;
-
-  const currentSessionId = req.session?.id;
-
-  if (!user || !currentSessionId) {
-    throw new HttpException(HttpStatus.FORBIDDEN, 'Forbidden');
-  }
-
-  const session = await Session.findOne({
-    where: { id: currentSessionId, user },
-  });
-
-  if (!session) {
-    throw new HttpException(HttpStatus.NOT_FOUND, 'Session not found');
-  }
-
-  await Session.remove(session);
-
-  await auditService.logAction({
-    performedBy: user.employeeAccount,
-    actionDescription: `${user.name} logged out of the dashboard`,
-    affectedResourceId: session.id,
-    affectedResourceType: 'Session',
-  });
-
-  res.status(HttpStatus.NO_CONTENT).send(formatSuccessResponse('Logged out successfully', null));
-});
-
 const handleCustomerSignUp = expressAsyncHandler(async (req: Request, res: Response) => {
   const signupDataSchema = z.object({
     name: z.string().trim(),
@@ -360,6 +331,35 @@ const handleCustomerAuthentication = expressAsyncHandler(async (req: Request, re
       customerId: user.customerAccount.id,
     }),
   );
+});
+
+const handleLogout = expressAsyncHandler(async (req: Request, res: Response) => {
+  const user = req.user;
+
+  const currentSessionId = req.session?.id;
+
+  if (!user || !currentSessionId) {
+    throw new HttpException(HttpStatus.FORBIDDEN, 'Forbidden');
+  }
+
+  const session = await Session.findOne({
+    where: { id: currentSessionId, user },
+  });
+
+  if (!session) {
+    throw new HttpException(HttpStatus.NOT_FOUND, 'Session not found');
+  }
+
+  await Session.remove(session);
+
+  await auditService.logAction({
+    performedBy: user.employeeAccount,
+    actionDescription: `${user.name} logged out of the dashboard`,
+    affectedResourceId: session.id,
+    affectedResourceType: 'Session',
+  });
+
+  res.status(HttpStatus.NO_CONTENT).send(formatSuccessResponse('Logged out successfully', null));
 });
 
 export default {

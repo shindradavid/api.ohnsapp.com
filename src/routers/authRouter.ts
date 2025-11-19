@@ -5,6 +5,7 @@ import authController from '../controllers/authController';
 
 const authRouter = Router();
 
+authRouter.delete('/logout', authMiddleware, authController.handleLogout);
 // employees
 authRouter.get('/employees', authMiddleware, authController.handleEmployeeAuthentication);
 authRouter.post('/employees/login', authController.handleEmployeeLogin);
